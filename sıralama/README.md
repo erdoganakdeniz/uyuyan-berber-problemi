@@ -7,3 +7,11 @@ Program tarafından 3 thread yaratılacaktır. İlk thread dizinin ilk 500 elema
 Her iki thread sıralama işini bitirdikten sonra üçüncü thread ilk thread’in sıraladığı ve ikinci thread’in sıraladığı dizileri alarak birleştirme işlemini gerçekleştirecektir.
 Birleştirme işlemi sonunda elimizde sıralanmış yeni bir dizi olmalıdır.
 Son adımda listedeki elemanların programın çalıştığı dizinde oluşturulacak “son.txt” isimli dosyaya yazdırılması gerekmektedir.
+
+**Durum:**
+- [ ] Rastgele üretilmiş 1000 benzersiz elemanlı bir dizi oluşturulması.
+- [ ] 3 iş parçasının oluşturulması.
+- [ ] Dizi elemanlarının ikiye bölünerek iki iş parçasında ayrı ayrı sıralanması.
+- [ ] Sıralanmış dizilerin son iş parçasında birleştirilip tekrar sıralanması.
+- [ ] Sıralanmış dizideki elemanların "son.txt" isimli dosyaya yazdırılması.
+
