@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <pthread.h>
 
-#define ELEMAN_SAYISI 1000
+#define ELEMAN_SAYISI 10
 #define URETIM_SINIRI 10000
 
 unsigned char kullanilan_sayilar[URETIM_SINIRI] = { 0 };
@@ -15,17 +15,19 @@ typedef struct
     int bitis;
 } parametre;
 
+int* bazDizi;
+int* sonDizi;
 
 void* sirala(void* parametreler);       /* sıralama iş parçası fonksiyonu */
 void* birlestir(void* parametreler);    /* sonuçları birleştiren iş parçası fonksiyonu */
 
 int main()
 {
-    int* bazDizi = (int*) malloc(ELEMAN_SAYISI * sizeof(*bazDizi));
-    int* sonDizi = (int*) malloc(ELEMAN_SAYISI * sizeof(*bazDizi));
+    bazDizi = (int*) malloc(ELEMAN_SAYISI * sizeof(*bazDizi));
+    sonDizi = (int*) malloc(ELEMAN_SAYISI * sizeof(*sonDizi));
 
     srand((unsigned)time(0));
-    printf("\nÜRETİLEN ELEMANLAR: \n");
+    printf("\nÜRETİLEN ELEMANLAR:\n");
 
     /* Floyd Algoritması ile rastgele benzersiz sayı üretimi. O(ELEMAN_SAYISI) */
     int in, im;
@@ -101,7 +103,49 @@ int main()
 
 void* sirala(void* parametreler)
 {
+    parametre* p = (parametre*) parametreler;
+    
+    int baslangic = p->baslangic;
+    int bitis = p->bitis + 1;
 
+    /* Alınan dizinin gösterilmesi */
+    printf("SIRALAMA İŞ PARÇASI İÇİN ALINAN DİZİ:\n");
+    for (int i = baslangic; i < bitis; i++)
+    {
+        printf("%d\t", bazDizi[i]);
+    }
+    printf("\n");
+
+    /* Alınan dizinin sıralanması */
+    int g = 0;
+    for (int i = baslangic; i < bitis; i++)
+    {
+        for (int j = baslangic; j < bitis - 1; j++)
+        {
+            if (bazDizi[j] > bazDizi[j + 1])
+            {
+                g = bazDizi[j];
+                bazDizi[j] = bazDizi[j + 1];
+                bazDizi[j + 1] = g;
+            }
+        }
+    }
+
+    /* Sıralanmış dizinin yazdırılması */
+    printf("SIRALAMA İŞ PARÇASI SONRASI SIRALANAN DİZİ:\n");
+    for (int i = baslangic; i < bitis; i++)
+    {
+        printf("%d\t", bazDizi[i]);
+    }
+    printf("\n");
+
+    for (int i = baslangic; i < bitis; i++)
+    {
+        sonDizi[i] = bazDizi[i];
+    }
+    printf("\n");
+
+    pthread_exit(NULL);
 }
 
 void* birlestir(void* parametreler)
