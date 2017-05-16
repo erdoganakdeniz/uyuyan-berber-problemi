@@ -13,6 +13,7 @@ typedef struct
 {
     int baslangic;
     int bitis;
+    short ip_no;
 } parametre;
 
 int* bazDizi;
@@ -70,6 +71,7 @@ int main()
     parametre* p = (parametre*) malloc(sizeof(parametre));
     p->baslangic = 0;
     p->bitis = (ELEMAN_SAYISI / 2) - 1;
+    p->ip_no = 1;
     pthread_create(&isleyiciler[0], 0, sirala, p);
     /* Birinci sıralama iş parçasının oluşturulması */
 
@@ -77,6 +79,7 @@ int main()
     p = (parametre*) malloc(sizeof(parametre));
     p->baslangic = (ELEMAN_SAYISI / 2);
     p->bitis = ELEMAN_SAYISI - 1;
+    p->ip_no = 2;
     pthread_create(&isleyiciler[1], 0, sirala, p);
     /* İkinci sıralama iş parçasının oluşturulması */
 
@@ -90,6 +93,7 @@ int main()
     p = (parametre*) malloc(sizeof(parametre));
     p->baslangic = 0;
     p->bitis = ELEMAN_SAYISI / 2;
+    p->ip_no = 3;
     pthread_create(&isleyiciler[2], 0, birlestir, p);
     /* Birleştirmek için kullanılacak iş parçasının oluşturulması */
 
@@ -103,13 +107,14 @@ int main()
 
 void* sirala(void* parametreler)
 {
+    printf("------------------------------------------------------------\n");
     parametre* p = (parametre*) parametreler;
     
     int baslangic = p->baslangic;
     int bitis = p->bitis + 1;
 
     /* Alınan dizinin gösterilmesi */
-    printf("SIRALAMA İŞ PARÇASI İÇİN ALINAN DİZİ:\n");
+    printf("\n(%d) SIRALAMA İŞ PARÇASI İÇİN ALINAN DİZİ:\n", p->ip_no);
     for (int i = baslangic; i < bitis; i++)
     {
         printf("%d\t", bazDizi[i]);
@@ -132,7 +137,7 @@ void* sirala(void* parametreler)
     }
 
     /* Sıralanmış dizinin yazdırılması */
-    printf("SIRALAMA İŞ PARÇASI SONRASI SIRALANAN DİZİ:\n");
+    printf("(%d) SIRALAMA İŞ PARÇASI SONRASI SIRALANAN DİZİ:\n", p->ip_no);
     for (int i = baslangic; i < bitis; i++)
     {
         printf("%d\t", bazDizi[i]);
