@@ -10,7 +10,7 @@ Son adımda listedeki elemanların programın çalıştığı dizinde oluşturul
 
 **Durum:**
 - [x] Rastgele üretilmiş 1000 benzersiz elemanlı bir dizi oluşturulması.
-- [ ] 3 iş parçasının oluşturulması.
+- [x] 3 iş parçasının oluşturulması.
 - [ ] Dizi elemanlarının ikiye bölünerek iki iş parçasında ayrı ayrı sıralanması.
 - [ ] Sıralanmış dizilerin son iş parçasında birleştirilip tekrar sıralanması.
 - [ ] Sıralanmış dizideki elemanların "son.txt" isimli dosyaya yazdırılması.
