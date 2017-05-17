@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <pthread.h>
 
-#define ELEMAN_SAYISI 10
+#define ELEMAN_SAYISI 100
 #define URETIM_SINIRI 10000
 
 unsigned char kullanilan_sayilar[URETIM_SINIRI] = { 0 };
@@ -20,7 +20,7 @@ int* bazDizi;
 int* sonDizi;
 
 void* sirala(void* parametreler);       /* sıralama iş parçası fonksiyonu */
-void* birlestir(void* parametreler);    /* sonuçları birleştiren iş parçası fonksiyonu */
+void* birlestirvesirala(void* parametreler);    /* sonuçları birleştiren iş parçası fonksiyonu */
 
 int main()
 {
@@ -77,7 +77,7 @@ int main()
 
     /* İkinci sıralama iş parçasının oluşturulması */
     p = (parametre*) malloc(sizeof(parametre));
-    p->baslangic = (ELEMAN_SAYISI / 2);
+    p->baslangic = ELEMAN_SAYISI / 2;
     p->bitis = ELEMAN_SAYISI - 1;
     p->ip_no = 2;
     pthread_create(&isleyiciler[1], 0, sirala, p);
@@ -92,9 +92,9 @@ int main()
     /* Birleştirmek için kullanılacak iş parçasının oluşturulması */
     p = (parametre*) malloc(sizeof(parametre));
     p->baslangic = 0;
-    p->bitis = ELEMAN_SAYISI / 2;
+    p->bitis = ELEMAN_SAYISI;
     p->ip_no = 3;
-    pthread_create(&isleyiciler[2], 0, birlestir, p);
+    pthread_create(&isleyiciler[2], 0, birlestirvesirala, p);
     /* Birleştirmek için kullanılacak iş parçasının oluşturulması */
 
     pthread_join(isleyiciler[2], NULL); /* Üçüncü iş parçasını bekle */
@@ -118,9 +118,12 @@ void* sirala(void* parametreler)
     for (int i = baslangic; i < bitis; i++)
     {
         printf("%d\t", bazDizi[i]);
-    }
-    printf("\n");
 
+        if ((i + 1) % 10 == 0)
+            printf("\n");
+    }
+    printf("\n\n------------------------------------------------------------\n\n");
+    
     /* Alınan dizinin sıralanması */
     int g = 0;
     for (int i = baslangic; i < bitis; i++)
@@ -141,6 +144,9 @@ void* sirala(void* parametreler)
     for (int i = baslangic; i < bitis; i++)
     {
         printf("%d\t", bazDizi[i]);
+
+        if ((i + 1) % 10 == 0)
+            printf("\n");
     }
     printf("\n");
 
@@ -153,7 +159,39 @@ void* sirala(void* parametreler)
     pthread_exit(NULL);
 }
 
-void* birlestir(void* parametreler)
+void* birlestirvesirala(void* parametreler)
 {
+    printf("------------------------------------------------------------\n");
+    parametre* p = (parametre*) parametreler;
 
+    int baslangic = p->baslangic;
+    int bitis = p->bitis + 1;
+
+    /* Alınan dizinin sıralanması */
+    int g = 0;
+    for (int i = baslangic; i < bitis; i++)
+    {
+        for (int j = baslangic; j < bitis - 1; j++)
+        {
+            if (sonDizi[j] > sonDizi[j + 1])
+            {
+                g = sonDizi[j];
+                sonDizi[j] = sonDizi[j + 1];
+                sonDizi[j + 1] = g;
+            }
+        }
+    }
+
+    /* Sıralanmış dizinin yazdırılması */
+    printf("(%d) BİRLEŞTİRME VE SIRALAMA İŞ PARÇASI SONRASI SIRALANAN DİZİ:\n", p->ip_no);
+    for (int i = baslangic + 1; i < bitis; i++)
+    {
+        printf("%d\t", sonDizi[i]);
+
+        if (i % 10 == 0)
+            printf("\n");
+    }
+    printf("\n");
+
+    pthread_exit(NULL);
 }
