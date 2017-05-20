@@ -13,5 +13,5 @@ Son adımda listedeki elemanların programın çalıştığı dizinde oluşturul
 - [x] 3 iş parçasının oluşturulması.
 - [x] Dizi elemanlarının ikiye bölünerek iki iş parçasında ayrı ayrı sıralanması.
 - [x] Sıralanmış dizilerin son iş parçasında birleştirilip tekrar sıralanması.
-- [ ] Sıralanmış dizideki elemanların "son.txt" isimli dosyaya yazdırılması.
+- [x] Sıralanmış dizideki elemanların "son.txt" isimli dosyaya yazdırılması.
 

@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <pthread.h>
 
-#define ELEMAN_SAYISI 100
+#define ELEMAN_SAYISI 1000
 #define URETIM_SINIRI 10000
 
 unsigned char kullanilan_sayilar[URETIM_SINIRI] = { 0 };
@@ -99,8 +99,25 @@ int main()
 
     pthread_join(isleyiciler[2], NULL); /* Üçüncü iş parçasını bekle */
 
-    free(bazDizi);
-    free(sonDizi);
+    free(bazDizi); /* baz diziyi bellekten temizle */
+
+    /* Sıralanmış dizi elemanlarının dosyaya yazdırılması */
+    FILE* d = fopen("son.txt", "w");
+    
+    if (d == NULL)
+    {
+        printf("Dosya hatası oluştu.\n");
+        return EXIT_FAILURE;
+    }
+
+    for (int i = 0; i < ELEMAN_SAYISI; i++)
+    {
+        fprintf(d, "%d. Eleman: %d\n", i + 1, sonDizi[i + 1]);
+    }
+
+    fclose(d);
+
+    free(sonDizi); /* son diziyi bellekten temizle */
 
     return EXIT_SUCCESS;
 }
