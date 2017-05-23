@@ -46,7 +46,7 @@ int main(int argc, char** args)
 
     for (int i = 0; i < MUSTERI_SINIRI; i++)
     {
-        musteriNumaralari[i] = i;
+        musteriNumaralari[i] = i + 1;
     }
 
     /* Semaforların oluşturulması */
@@ -79,14 +79,14 @@ void* berber()
     while (!tamamlanmaDurumu)
     {
         /* Bir müşteri gelene kadar berber uyur */
-        printf("Berber uyumakta.\n", );
+        printf("Berber uyumakta.\n");
         sem_wait(&berberUykusu);
 
         if (!tamamlanmaDurumu)
         {
             /* Berber çalışmasının simule edilmesi */
-            printf("Berber çalışıyor.\n", );
-
+            printf("Berber çalışıyor.\n");
+            rastgeleBekle(3);
             printf("Berber işini bitirdi.\n");
 
             /* İşi biten müşterinin serbest bırakılması */
@@ -94,17 +94,37 @@ void* berber()
         }
         else
         {
-            printf("Berber bugünkü işini bitirdi.\n", );
+            printf("Berber bugünkü işini bitirdi.\n");
         }
     }
 }
 
 void* musteri(void* sayi)
 {
+    int s = *(int*)sayi;
 
+    /* Müşteri hareketlerinin simule edilmesi */
+    rastgeleBekle(3);
+    printf("%d numaralı müşteri dükkana geldi.\n", s);
+
+    /* Bekleme odasında yer açılmasını bekle */
+    sem_wait(&beklemeOdasi);
+    printf("%d numaralı müşteri bekleme odasına girdi.\n", s);
+
+    sem_wait(&berberKoltugu);   /* Berber koltuğu için bekle */
+    sem_post(&beklemeOdasi);    /* Koltuk için bekleme odasından ayrıl */
+
+    /* Berberi uyandır */
+    printf("%d numaralı müşteri berberi uyandırdı.\n", s);
+    sem_post(&berberUykusu);
+
+    sem_wait(&musteriBekletici);/* Berberin işini bitirmesini bekle */
+    sem_post(&berberKoltugu);   /* Berber koltuğundan ayrıl */
+
+    printf("%d numaralı müşteri dükkandan ayrıldı.\n", s);
 }
 
 void* rastgeleBekle(int saniye)
 {
-    sleep((rand() * saniye) + 1);
+    sleep(((rand() % 2) * saniye) + 1);
 }
