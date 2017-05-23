@@ -52,6 +52,22 @@ int main(int argc, char** args)
     sem_init(&musteriBekletici, 0, 0);
     sem_init(&berberUykusu, 0, 0);
 
+    pthread_t ipBerber, musteriler[MUSTERI_SINIRI];
+
+    /* Berber iş parçasının oluşturulması */
+    pthread_create(&ipBerber, NULL, berber, NULL);
+
+    /* Müşteri iş parçalarının oluşturulması */
+    for (int i = 0; i < musteriSayisi; i++)
+    {
+        pthread_create(&musteriler[i], NULL, musteri, (void*)&musteriNumaralari[i]);
+        pthread_join(musteriler[i], NULL);
+    }
+
+    tamamlanmaDurumu = 1;
+    sem_post(&berberUykusu);
+    pthread_join(ipBerber, NULL);
+
     return EXIT_SUCCESS;
 }
 
