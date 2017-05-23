@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <pthread.h>
 #include <semaphore.h>
@@ -21,6 +22,8 @@ short tamamlanmaDurumu = 0;
 
 int main(int argc, char** args)
 {
+    srand((unsigned int)time(NULL));
+
     int musteriSayisi, sandalyeSayisi, musteriNumaralari[MUSTERI_SINIRI];
 
     if (argc != 3)
@@ -73,7 +76,27 @@ int main(int argc, char** args)
 
 void* berber()
 {
+    while (!tamamlanmaDurumu)
+    {
+        /* Bir müşteri gelene kadar berber uyur */
+        printf("Berber uyumakta.\n", );
+        sem_wait(&berberUykusu);
 
+        if (!tamamlanmaDurumu)
+        {
+            /* Berber çalışmasının simule edilmesi */
+            printf("Berber çalışıyor.\n", );
+
+            printf("Berber işini bitirdi.\n");
+
+            /* İşi biten müşterinin serbest bırakılması */
+            sem_post(&musteriBekletici);
+        }
+        else
+        {
+            printf("Berber bugünkü işini bitirdi.\n", );
+        }
+    }
 }
 
 void* musteri(void* sayi)
@@ -83,5 +106,5 @@ void* musteri(void* sayi)
 
 void* rastgeleBekle(int saniye)
 {
-
+    sleep((rand() * saniye) + 1);
 }
