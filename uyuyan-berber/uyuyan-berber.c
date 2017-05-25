@@ -40,8 +40,6 @@ int main(int argc, char** args)
     bosSandalyeSayisi = sandalyeSayisi;
     koltuk = (int*) malloc(sizeof(int) * sandalyeSayisi);
 
-    int berberNumaralari[koltukSayisi];
-
     if (musteriSayisi > MUSTERI_SINIRI)
     {
         printf("\nMüşteri sınırı: %d\n\n", MUSTERI_SINIRI);
